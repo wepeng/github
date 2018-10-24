@@ -1,0 +1,66 @@
+CentOS系统下，添加git用户，专门用以管理git服务器
+sudo adduser git
+sudo passwd git
+
+修改git用户权限
+sudo gedit /etc/sudoers
+在fubo     ALL=(ALL)       ALL下面加上
+git    ALL=(ALL)       ALL
+
+ 
+安装配置git
+sudo yum install -y git
+git config --global user.email "GitAdmin@X.com"
+git config --global user.name "GitAdmin"
+
+ 
+
+在git目录下新建两个文件夹，分别用来放仓库和克隆仓库
+
+切换到git用户
+
+su git
+cd /home/git
+mkdir gitrepo
+mkdir gitclone
+
+
+设置服务器静态ip(略)
+
+ 
+
+
+创建一个git项目
+项目统一建在/home/git/gitrepo目录下，一个项目一个文件夹，例如：/home/git/gitrepo/moodle.git
+切换到git用户
+su git
+cd /home/git/gitrepo
+mkdir moodle.git
+cd moodle.git
+git --bare init
+
+这就生成了一个空的仓库，可以远程clone添加修改文件了。注意:这里不是工作区，不能直接对里面的文件进行编辑。如果要在服务器本地编辑，同样需要clone一个。
+
+
+创建dev分支(空项目不能创建分支，要先添加点文件进去)
+cd moodle
+touch readme.txt
+git add .
+git commit -m 'init'
+git push origin master
+git branch dev
+git checkout dev
+git push origin dev
+
+可以开始往里面添加内容了！
+
+在服务器本地clone的项目统一放在/home/git/gitclone目录下
+cd /home/git/gitclone
+git clone git@120.211itrepo/performance.git
+git clone git@120..113:gitrepo/data.git
+git clone git@12113:gitrepo/workflow.git
+git clone git@120.113:gitrepo/userCenter.git
+
+
+
+ 
