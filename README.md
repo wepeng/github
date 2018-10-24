@@ -1,5 +1,11 @@
 # github
 
+
+日常使用：
+编辑之前：
+git pull
+
+
 如何使用github：
 首先你需要一个github账号，所有还没有的话先去注册吧！
 https://github.com/
