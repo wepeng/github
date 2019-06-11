@@ -1,0 +1,65 @@
+https://blog.csdn.net/vim_wj/article/details/78300239
+
+GitHub----向开源框架提交pr的过程
+
+简单过程
+首先git分为本地仓库(自己电脑中)和远程仓库(git官网自己的账号中)，仓库可以理解为保存代码的地方，简单的说是在自己本地仓库修改代码，提交到自己远程仓库，提交pr后被接受后再会被合并到master。
+
+下面一步一步来。
+
+详细过程
+申请账号、添加ssh公钥等过程就不说了哈。
+
+1、fork
+将项目fork到自己的仓库中。
+
+2、需要将远程仓库clone到本地
+git clone https://github.com/***/***.git
+
+
+上面的命令完成后，当前目录下会多一个目录，我clone的是flink，所以会多一个flink目录，进到flink目录中，试试跑一下git status试试，会提示现在是master分支。
+
+3、建立连接
+用git remote -v命令，可以看到此时只与自己的远程仓库建立了连接
+
+还需要与上游建立连接，这里上游指的是一开始fork的那个项目源，以flink为例，执行如下命令：
+git remote add upstream https://github.com/apache/flink.git
+再用git remote -v可以看到：
+
+
+4、创建分支
+接着上面的运行命令：git checkout -b flink-fs
+这个命令的意思是创建一个叫flink-fs的分支，运行这个命令后bash将自动切换到新的分支下
+
+5、修改代码
+自行修改代码哈
+
+6、提交
+可以先使用git status来查看有哪些文件被修改了
+然后再git add . 将要提交的文件都加上
+然后再git commit -m "modify XX"，需要注意的是git commit只是把修改的代码提交到当前分支(当前分支是flink-fs，而不是master)，”modify XX”是本次提交的简单说明
+
+然后再git push origin flink-fs，这一步才是将当前分支推送到自己的远程仓库。
+
+这时，在自己的远程仓库便能看刚才push上去的分支了
+
+6、提交pr
+找到New pull request
+需要注意的是compare处选择刚才提交上来的分支
+然后点Create pull request
+写好名字，写好说明，提交，就OK啦。
+
+其它：关于check不通过的问题
+github有代码自己编译和check机制，在你提交pr的时候，项目可能已经有了比较大的变更(每天都有世界各地的coder提pr)，而你没有将分支保持与项目同步，所以有可能会导致check失败，pr被无视。
+
+还记得我们在自己本地有一个flink master分支，然后又拉了一个flink-fs分支，然后在flink-fs上进行修改，提交的也是flink-fs，然后又想起了之前有一步是“与上游建立连接”，说到你可能已经知道了master的作用–用于远程代码同步。
+
+所以每次提交pr前，都要先从做代码同步。过程如下：
+
+先fetch
+再rebase
+再push master
+
+push完后，远程仓库便可看到你的branch版本和master分支一致了，否则这个位置会显示与master相差了多少次commit。
+
+做完这些操作，就可以回到之前的详细过程来操作了。
